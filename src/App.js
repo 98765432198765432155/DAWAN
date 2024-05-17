@@ -1,12 +1,14 @@
 import './App.css';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input, Button } from '@douyinfe/semi-ui';
 import { Typography } from '@douyinfe/semi-ui';
-
+import { useHistory } from 'react-router-dom';
 
 function App() {
   const { Title } = Typography;
   const usernameInputRef = useRef(null);
+  const [isLoginSuccessful, setLoginSuccessful] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     if (usernameInputRef.current) {
@@ -25,21 +27,24 @@ function App() {
     })
       .then(() => {
         console.log('跳转新页面');
+        setLoginSuccessful(true);
+        history.push('/login');
       })
       .catch(error => {
         console.log('错误处理：', error);
+        setLoginSuccessful(false);
       });
   };
 
   return (
-    <>
+    <div className="App">
       <Title style={{ margin: '8px 0' }} >欢迎登陆教师点名系统</Title>
       <Input placeholder='输入用户名' ref={usernameInputRef}></Input>
       <br/><br/>
       <Input placeholder='输入密码' ></Input>
       <br/><br/>
-      <Button onClick={login}>Login</Button>
-    </>
+      <Button onClick={login} style={{backgroundColor: isLoginSuccessful ? 'default' : 'gray'}}>Login</Button>
+    </div>
   );
 }
 
